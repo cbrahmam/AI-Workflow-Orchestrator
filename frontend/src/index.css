@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-canvas-bg: #0D0D15;
+  --color-panel-bg: #252535;
+  --color-node-bg: #1E1E2E;
+  --color-node-border: #2A2A3C;
+  --color-toolbar-bg: #161622;
+  --color-toolbar-border: #2A2A3C;
+
+  --color-node-input: #10B981;
+  --color-node-llm: #8B5CF6;
+  --color-node-data: #0EA5E9;
+  --color-node-integration: #F59E0B;
+  --color-node-logic: #EAB308;
+  --color-node-file: #6B7280;
+  --color-node-output: #EF4444;
+
+  --color-status-idle: #6B7280;
+  --color-status-running: #3B82F6;
+  --color-status-success: #10B981;
+  --color-status-error: #EF4444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-canvas-bg);
+  color: #E2E8F0;
+  overflow: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-panel-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #3A3A4C;
+  border-radius: 3px;
+}
+
+.react-flow__background {
+  background-color: var(--color-canvas-bg) !important;
+}
+
+.react-flow__controls {
+  background: var(--color-panel-bg) !important;
+  border: 1px solid var(--color-node-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.react-flow__controls-button {
+  background: var(--color-panel-bg) !important;
+  border-color: var(--color-node-border) !important;
+  fill: #94A3B8 !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #2F2F42 !important;
+  fill: #E2E8F0 !important;
+}
+
+.react-flow__minimap {
+  background: var(--color-panel-bg) !important;
+  border: 1px solid var(--color-node-border) !important;
+  border-radius: 8px !important;
+}
+
+@keyframes pulse-border {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.node-running {
+  animation: pulse-border 1.5s ease-in-out infinite;
+}
+
+@keyframes success-flash {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.node-success-flash {
+  animation: success-flash 0.6s ease-out;
+}
