@@ -3,6 +3,7 @@ import {
   ReactFlow,
   Background,
   Controls,
+  MiniMap,
   useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
@@ -50,6 +51,7 @@ export default function Canvas() {
   const setSelectedNode = useWorkflowStore(s => s.setSelectedNode)
   const undo = useWorkflowStore(s => s.undo)
   const redo = useWorkflowStore(s => s.redo)
+  const duplicateSelectedNode = useWorkflowStore(s => s.duplicateSelectedNode)
 
   const onDragOver = useCallback((event) => {
     event.preventDefault()
@@ -87,10 +89,14 @@ export default function Canvas() {
         e.preventDefault()
         redo()
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'd') {
+        e.preventDefault()
+        duplicateSelectedNode()
+      }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [undo, redo])
+  }, [undo, redo, duplicateSelectedNode])
 
   return (
     <div ref={reactFlowWrapper} className="flex-1 h-full">
@@ -113,6 +119,19 @@ export default function Canvas() {
       >
         <Background variant="dots" gap={20} size={1} color="#333" />
         <Controls />
+        <MiniMap
+          nodeColor={(node) => {
+            const type = node.data?.nodeType || node.type
+            const colors = {
+              input: '#10B981', output: '#EF4444', llm: '#8B5CF6',
+              transform: '#0EA5E9', api_call: '#F59E0B', scrape: '#14B8A6',
+              condition: '#EAB308', merge: '#0EA5E9', file: '#6B7280',
+            }
+            return colors[type] || '#6B7280'
+          }}
+          maskColor="rgba(13, 13, 21, 0.8)"
+          style={{ background: '#252535', border: '1px solid #2A2A3C', borderRadius: 8 }}
+        />
       </ReactFlow>
     </div>
   )
