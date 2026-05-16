@@ -1,0 +1,505 @@
+[
+  {
+    "id": "template-content-research",
+    "name": "Content Research & Writing",
+    "description": "Research a topic by scraping the web, summarize findings, and generate a polished article.",
+    "category": "Content",
+    "node_count": 5,
+    "workflow_json": {
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "input",
+          "position": { "x": 50, "y": 200 },
+          "data": {
+            "label": "Input",
+            "title": "Topic Input",
+            "nodeType": "input",
+            "status": "idle",
+            "config": { "inputType": "text", "defaultValue": "" },
+            "configPreview": "text"
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "scrape",
+          "position": { "x": 320, "y": 200 },
+          "data": {
+            "label": "Web Scrape",
+            "title": "Research Sources",
+            "nodeType": "scrape",
+            "status": "idle",
+            "config": { "url": "{{Topic Input.output}}", "extractionType": "fullText", "selector": "", "maxPages": 3 },
+            "configPreview": "{{Topic Input.output}}"
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "llm",
+          "position": { "x": 590, "y": 200 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Summarize Research",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "You are a research analyst. Summarize the key findings from the provided content into clear, structured bullet points.",
+              "userPrompt": "Summarize the following research content:\n\n{{Research Sources.output}}",
+              "temperature": 0.5,
+              "maxTokens": 1024
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "llm",
+          "position": { "x": 860, "y": 200 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Write Article",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "You are a skilled content writer. Write engaging, well-structured articles based on research summaries.",
+              "userPrompt": "Write a comprehensive article based on these research findings:\n\n{{Summarize Research.output}}",
+              "temperature": 0.7,
+              "maxTokens": 2048
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_5",
+          "type": "output",
+          "position": { "x": 1130, "y": 200 },
+          "data": {
+            "label": "Output",
+            "title": "Final Article",
+            "nodeType": "output",
+            "status": "idle",
+            "config": { "outputType": "display", "label": "Article" },
+            "configPreview": "display"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e1-2", "source": "node_1", "target": "node_2", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e2-3", "source": "node_2", "target": "node_3", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e3-4", "source": "node_3", "target": "node_4", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e4-5", "source": "node_4", "target": "node_5", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } }
+      ]
+    }
+  },
+  {
+    "id": "template-lead-research",
+    "name": "Lead Research Pipeline",
+    "description": "Research a company by scraping their website, extract key information, and generate personalized outreach.",
+    "category": "Sales",
+    "node_count": 5,
+    "workflow_json": {
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "input",
+          "position": { "x": 50, "y": 200 },
+          "data": {
+            "label": "Input",
+            "title": "Company URL",
+            "nodeType": "input",
+            "status": "idle",
+            "config": { "inputType": "text", "defaultValue": "" },
+            "configPreview": "text"
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "scrape",
+          "position": { "x": 320, "y": 200 },
+          "data": {
+            "label": "Web Scrape",
+            "title": "Scrape Website",
+            "nodeType": "scrape",
+            "status": "idle",
+            "config": { "url": "{{Company URL.output}}", "extractionType": "fullText", "selector": "", "maxPages": 2 },
+            "configPreview": "{{Company URL.output}}"
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "llm",
+          "position": { "x": 590, "y": 200 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Extract Info",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "Extract key company information: industry, size, products/services, recent news, pain points. Return as structured JSON.",
+              "userPrompt": "Extract company information from this website content:\n\n{{Scrape Website.output}}",
+              "temperature": 0.3,
+              "maxTokens": 1024
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "llm",
+          "position": { "x": 860, "y": 200 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Generate Outreach",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "You are a B2B sales expert. Write personalized, concise outreach emails based on company research.",
+              "userPrompt": "Based on this company research, write a personalized cold outreach email:\n\n{{Extract Info.output}}",
+              "temperature": 0.7,
+              "maxTokens": 1024
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_5",
+          "type": "output",
+          "position": { "x": 1130, "y": 200 },
+          "data": {
+            "label": "Output",
+            "title": "Outreach Email",
+            "nodeType": "output",
+            "status": "idle",
+            "config": { "outputType": "display", "label": "Email" },
+            "configPreview": "display"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e1-2", "source": "node_1", "target": "node_2", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e2-3", "source": "node_2", "target": "node_3", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e3-4", "source": "node_3", "target": "node_4", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e4-5", "source": "node_4", "target": "node_5", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } }
+      ]
+    }
+  },
+  {
+    "id": "template-document-summarizer",
+    "name": "Document Summarizer",
+    "description": "Read a document, extract its content, generate a summary, and format it as clean markdown.",
+    "category": "Productivity",
+    "node_count": 5,
+    "workflow_json": {
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "input",
+          "position": { "x": 50, "y": 200 },
+          "data": {
+            "label": "Input",
+            "title": "Document Path",
+            "nodeType": "input",
+            "status": "idle",
+            "config": { "inputType": "text", "defaultValue": "" },
+            "configPreview": "text"
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "file",
+          "position": { "x": 320, "y": 200 },
+          "data": {
+            "label": "File",
+            "title": "Read Document",
+            "nodeType": "file",
+            "status": "idle",
+            "config": { "operation": "read", "fileType": "txt", "filename": "{{Document Path.output}}" },
+            "configPreview": "read txt"
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "llm",
+          "position": { "x": 590, "y": 200 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Summarize",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "You are an expert summarizer. Create concise, comprehensive summaries that capture the key points and main arguments of a document.",
+              "userPrompt": "Summarize the following document:\n\n{{Read Document.output}}",
+              "temperature": 0.5,
+              "maxTokens": 1500
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "transform",
+          "position": { "x": 860, "y": 200 },
+          "data": {
+            "label": "Transform",
+            "title": "Format Markdown",
+            "nodeType": "transform",
+            "status": "idle",
+            "config": { "operation": "template", "template": "# Document Summary\n\n{{Summarize.output}}\n\n---\n*Generated by FlowPilot*" },
+            "configPreview": "template"
+          }
+        },
+        {
+          "id": "node_5",
+          "type": "output",
+          "position": { "x": 1130, "y": 200 },
+          "data": {
+            "label": "Output",
+            "title": "Summary Output",
+            "nodeType": "output",
+            "status": "idle",
+            "config": { "outputType": "display", "label": "Summary" },
+            "configPreview": "display"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e1-2", "source": "node_1", "target": "node_2", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e2-3", "source": "node_2", "target": "node_3", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e3-4", "source": "node_3", "target": "node_4", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e4-5", "source": "node_4", "target": "node_5", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } }
+      ]
+    }
+  },
+  {
+    "id": "template-data-aggregator",
+    "name": "Multi-Source Data Aggregator",
+    "description": "Query two API sources in parallel, merge results, and use AI to analyze and compare the data.",
+    "category": "Data",
+    "node_count": 6,
+    "workflow_json": {
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "input",
+          "position": { "x": 50, "y": 250 },
+          "data": {
+            "label": "Input",
+            "title": "Search Query",
+            "nodeType": "input",
+            "status": "idle",
+            "config": { "inputType": "text", "defaultValue": "" },
+            "configPreview": "text"
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "api_call",
+          "position": { "x": 330, "y": 120 },
+          "data": {
+            "label": "API Call",
+            "title": "Source 1",
+            "nodeType": "api_call",
+            "status": "idle",
+            "config": { "method": "GET", "url": "", "headers": [], "body": "", "authType": "none", "authValue": "", "responseHandling": "full" },
+            "configPreview": "GET"
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "api_call",
+          "position": { "x": 330, "y": 380 },
+          "data": {
+            "label": "API Call",
+            "title": "Source 2",
+            "nodeType": "api_call",
+            "status": "idle",
+            "config": { "method": "GET", "url": "", "headers": [], "body": "", "authType": "none", "authValue": "", "responseHandling": "full" },
+            "configPreview": "GET"
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "merge",
+          "position": { "x": 610, "y": 250 },
+          "data": {
+            "label": "Merge",
+            "title": "Combine Results",
+            "nodeType": "merge",
+            "status": "idle",
+            "config": { "strategy": "concatenate", "separator": "\n\n---\n\n", "template": "" },
+            "configPreview": "concatenate"
+          }
+        },
+        {
+          "id": "node_5",
+          "type": "llm",
+          "position": { "x": 880, "y": 250 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Analyze & Compare",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "You are a data analyst. Compare and analyze data from multiple sources, highlighting agreements, contradictions, and key insights.",
+              "userPrompt": "Analyze and compare the following data from two sources:\n\n{{Combine Results.output}}",
+              "temperature": 0.5,
+              "maxTokens": 1500
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_6",
+          "type": "output",
+          "position": { "x": 1150, "y": 250 },
+          "data": {
+            "label": "Output",
+            "title": "Analysis Result",
+            "nodeType": "output",
+            "status": "idle",
+            "config": { "outputType": "display", "label": "Analysis" },
+            "configPreview": "display"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e1-2", "source": "node_1", "target": "node_2", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e1-3", "source": "node_1", "target": "node_3", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e2-4", "source": "node_2", "target": "node_4", "targetHandle": "input-0", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e3-4", "source": "node_3", "target": "node_4", "targetHandle": "input-1", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e4-5", "source": "node_4", "target": "node_5", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e5-6", "source": "node_5", "target": "node_6", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } }
+      ]
+    }
+  },
+  {
+    "id": "template-content-classifier",
+    "name": "Conditional Content Classifier",
+    "description": "Classify text sentiment with AI, then branch to generate different responses based on positive or negative sentiment.",
+    "category": "AI",
+    "node_count": 6,
+    "workflow_json": {
+      "nodes": [
+        {
+          "id": "node_1",
+          "type": "input",
+          "position": { "x": 50, "y": 250 },
+          "data": {
+            "label": "Input",
+            "title": "Customer Message",
+            "nodeType": "input",
+            "status": "idle",
+            "config": { "inputType": "text", "defaultValue": "" },
+            "configPreview": "text"
+          }
+        },
+        {
+          "id": "node_2",
+          "type": "llm",
+          "position": { "x": 320, "y": 250 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Classify Sentiment",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "Classify the sentiment of the message. Respond with ONLY one word: 'positive' or 'negative'.",
+              "userPrompt": "Classify the sentiment:\n\n{{Customer Message.output}}",
+              "temperature": 0.1,
+              "maxTokens": 10
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_3",
+          "type": "condition",
+          "position": { "x": 590, "y": 250 },
+          "data": {
+            "label": "Condition",
+            "title": "Is Positive?",
+            "nodeType": "condition",
+            "status": "idle",
+            "config": { "conditionType": "contains", "compareValue": "positive", "trueLabel": "Positive", "falseLabel": "Negative" },
+            "configPreview": "contains"
+          }
+        },
+        {
+          "id": "node_4",
+          "type": "llm",
+          "position": { "x": 880, "y": 120 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Positive Response",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "Generate a warm, appreciative response to a positive customer message. Be concise and professional.",
+              "userPrompt": "Generate a positive response to this customer:\n\n{{Customer Message.output}}",
+              "temperature": 0.7,
+              "maxTokens": 512
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_5",
+          "type": "llm",
+          "position": { "x": 880, "y": 380 },
+          "data": {
+            "label": "LLM Call",
+            "title": "Escalation Response",
+            "nodeType": "llm",
+            "status": "idle",
+            "config": {
+              "provider": "claude",
+              "model": "claude-sonnet-4-20250514",
+              "systemPrompt": "Generate an empathetic escalation response to a negative customer message. Acknowledge their concern and offer to connect them with a specialist.",
+              "userPrompt": "Generate an escalation response for this negative message:\n\n{{Customer Message.output}}",
+              "temperature": 0.7,
+              "maxTokens": 512
+            },
+            "configPreview": "claude sonnet"
+          }
+        },
+        {
+          "id": "node_6",
+          "type": "output",
+          "position": { "x": 1160, "y": 250 },
+          "data": {
+            "label": "Output",
+            "title": "Response",
+            "nodeType": "output",
+            "status": "idle",
+            "config": { "outputType": "display", "label": "Response" },
+            "configPreview": "display"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e1-2", "source": "node_1", "target": "node_2", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e2-3", "source": "node_2", "target": "node_3", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e3-4", "source": "node_3", "sourceHandle": "true", "target": "node_4", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e3-5", "source": "node_3", "sourceHandle": "false", "target": "node_5", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e4-6", "source": "node_4", "target": "node_6", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } },
+        { "id": "e5-6", "source": "node_5", "target": "node_6", "animated": true, "type": "smoothstep", "style": { "stroke": "#555", "strokeDasharray": "5 5" } }
+      ]
+    }
+  }
+]

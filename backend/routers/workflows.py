@@ -69,6 +69,29 @@ def update_workflow(workflow_id: str, payload: WorkflowUpdate):
     return _row_to_response(row)
 
 
+@router.post("/{workflow_id}/duplicate", response_model=WorkflowResponse, status_code=201)
+def duplicate_workflow(workflow_id: str):
+    db = get_db()
+    row = db.execute("SELECT * FROM workflows WHERE id = ?", (workflow_id,)).fetchone()
+    if not row:
+        db.close()
+        raise HTTPException(status_code=404, detail="Workflow not found")
+
+    new_id = str(uuid.uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+    new_name = f"Copy of {row['name']}"
+
+    db.execute(
+        "INSERT INTO workflows (id, name, description, workflow_json, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (new_id, new_name, row["description"], row["workflow_json"], now, now),
+    )
+    db.commit()
+
+    new_row = db.execute("SELECT * FROM workflows WHERE id = ?", (new_id,)).fetchone()
+    db.close()
+    return _row_to_response(new_row)
+
+
 @router.delete("/{workflow_id}", status_code=204)
 def delete_workflow(workflow_id: str):
     db = get_db()

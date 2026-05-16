@@ -1,7 +1,10 @@
-import { Workflow } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Workflow, LayoutGrid, Sparkles } from 'lucide-react'
 import NodePalette from './NodePalette'
 
 export default function Sidebar() {
+  const navigate = useNavigate()
+
   return (
     <div
       className="w-[280px] flex-shrink-0 h-full flex flex-col overflow-hidden"
@@ -19,6 +22,24 @@ export default function Sidebar() {
           <h1 className="text-base font-semibold text-white leading-tight">FlowPilot</h1>
           <p className="text-[10px] text-slate-500">Visual AI Workflows</p>
         </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="px-3 pt-3 pb-1 flex gap-1.5">
+        <button
+          onClick={() => navigate('/workflows')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <LayoutGrid size={13} />
+          Workflows
+        </button>
+        <button
+          onClick={() => navigate('/templates')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <Sparkles size={13} />
+          Templates
+        </button>
       </div>
 
       {/* Node Palette */}
