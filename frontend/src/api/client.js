@@ -38,3 +38,38 @@ export function updateWorkflow(id, data) {
 export function deleteWorkflow(id) {
   return request(`/workflows/${id}`, { method: 'DELETE' })
 }
+
+export function duplicateWorkflow(id) {
+  return request(`/workflows/${id}/duplicate`, { method: 'POST' })
+}
+
+export function executeWorkflow(workflowId, input = null) {
+  return request(`/workflows/${workflowId}/execute`, {
+    method: 'POST',
+    body: JSON.stringify({ input }),
+  })
+}
+
+export function getExecution(executionId) {
+  return request(`/executions/${executionId}`)
+}
+
+export function cancelExecution(executionId) {
+  return request(`/executions/${executionId}/cancel`, { method: 'POST' })
+}
+
+export function listExecutions(workflowId) {
+  return request(`/workflows/${workflowId}/executions`)
+}
+
+export function listTemplates() {
+  return request('/templates')
+}
+
+export function getTemplate(id) {
+  return request(`/templates/${id}`)
+}
+
+export function useTemplate(id) {
+  return request(`/templates/${id}/use`, { method: 'POST' })
+}

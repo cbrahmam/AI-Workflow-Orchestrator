@@ -44,6 +44,12 @@ const useWorkflowStore = create((set, get) => ({
   workflowId: null,
   isDirty: false,
 
+  executionId: null,
+  executionStatus: null,
+  executionResult: null,
+  isExecuting: false,
+  showExecutionPanel: false,
+
   past: [],
   future: [],
 
@@ -218,6 +224,27 @@ const useWorkflowStore = create((set, get) => ({
     })
   },
 
+  duplicateSelectedNode() {
+    const { selectedNode, nodes } = get()
+    if (!selectedNode) return
+    const node = nodes.find(n => n.id === selectedNode)
+    if (!node) return
+
+    get()._pushHistory()
+    const id = generateNodeId()
+    const newNode = {
+      ...structuredClone(node),
+      id,
+      position: { x: node.position.x + 50, y: node.position.y + 50 },
+      data: { ...structuredClone(node.data), title: `${node.data.title} (copy)`, status: 'idle' },
+    }
+    set({
+      nodes: [...get().nodes, newNode],
+      selectedNode: id,
+      isDirty: true,
+    })
+  },
+
   resetWorkflow() {
     nodeCounter = 0
     set({
@@ -229,6 +256,36 @@ const useWorkflowStore = create((set, get) => ({
       isDirty: false,
       past: [],
       future: [],
+    })
+  },
+
+  setExecutionState(data) {
+    set(data)
+  },
+
+  updateNodeStatuses(nodeLogs) {
+    if (!nodeLogs) return
+    const statusMap = {}
+    for (const log of nodeLogs) {
+      statusMap[log.node_id] = log.status === 'pending' ? 'idle' : log.status
+    }
+    set({
+      nodes: get().nodes.map(n => {
+        const newStatus = statusMap[n.id]
+        if (newStatus && n.data.status !== newStatus) {
+          return { ...n, data: { ...n.data, status: newStatus } }
+        }
+        return n
+      }),
+    })
+  },
+
+  resetNodeStatuses() {
+    set({
+      nodes: get().nodes.map(n => ({
+        ...n,
+        data: { ...n.data, status: 'idle' },
+      })),
     })
   },
 }))
