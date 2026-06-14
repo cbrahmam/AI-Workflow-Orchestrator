@@ -1,0 +1,67 @@
+{
+  "name": "Email Digest Summarizer",
+  "description": "Paste a batch of emails and get a prioritized daily digest with action items",
+  "category": "automation",
+  "author": "flowpilot",
+  "tags": ["email", "summarization", "productivity"],
+  "nodes": [
+    {
+      "id": "input-1",
+      "type": "input",
+      "position": { "x": 100, "y": 200 },
+      "data": {
+        "title": "Email Batch",
+        "nodeType": "input",
+        "config": {
+          "inputType": "text",
+          "placeholder": "Paste your emails here (separate with ---)"
+        }
+      }
+    },
+    {
+      "id": "transform-1",
+      "type": "transform",
+      "position": { "x": 400, "y": 200 },
+      "data": {
+        "title": "Split Emails",
+        "nodeType": "transform",
+        "config": {
+          "transformType": "split",
+          "delimiter": "---"
+        }
+      }
+    },
+    {
+      "id": "llm-1",
+      "type": "llm",
+      "position": { "x": 700, "y": 200 },
+      "data": {
+        "title": "Summarize & Prioritize",
+        "nodeType": "llm",
+        "config": {
+          "provider": "anthropic",
+          "model": "claude-sonnet-4-20250514",
+          "systemPrompt": "You are an executive assistant. Summarize emails into a daily digest.",
+          "prompt": "Here are today's emails:\n\n{{Split Emails.output}}\n\nCreate a prioritized daily digest with:\n1. **Urgent / Action Required** — items needing immediate response\n2. **Important Updates** — FYI items worth reading\n3. **Low Priority** — can wait\n\nFor each item, include: sender, subject, 1-line summary, and suggested action.",
+          "temperature": 0.3,
+          "maxTokens": 2000
+        }
+      }
+    },
+    {
+      "id": "output-1",
+      "type": "output",
+      "position": { "x": 1000, "y": 200 },
+      "data": {
+        "title": "Daily Digest",
+        "nodeType": "output",
+        "config": {}
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "input-1", "target": "transform-1" },
+    { "id": "e2", "source": "transform-1", "target": "llm-1" },
+    { "id": "e3", "source": "llm-1", "target": "output-1" }
+  ]
+}

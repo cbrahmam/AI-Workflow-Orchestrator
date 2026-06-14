@@ -73,3 +73,7 @@ export function getTemplate(id) {
 export function useTemplate(id) {
   return request(`/templates/${id}/use`, { method: 'POST' })
 }
+
+export function listCommunityTemplates() {
+  return request('/templates/community')
+}
