@@ -6,6 +6,7 @@ from services.nodes.condition_node import ConditionNode
 from services.nodes.file_node import FileNode
 from services.nodes.merge_node import MergeNode
 from services.nodes.output_node import OutputNode
+from services.nodes.mcp_node import MCPNode
 
 NODE_REGISTRY = {
     "llm": LLMNode,
@@ -16,6 +17,7 @@ NODE_REGISTRY = {
     "file": FileNode,
     "merge": MergeNode,
     "output": OutputNode,
+    "mcp_tool": MCPNode,
 }
 
 

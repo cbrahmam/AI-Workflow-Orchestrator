@@ -19,7 +19,7 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 ## Features
 
 - **Visual drag-and-drop workflow builder** — Intuitive canvas powered by React Flow
-- **9 node types** — Input, LLM, Transform, API Call, Web Scrape, Condition, File, Merge, Output
+- **10 node types** — Input, LLM, Transform, API Call, Web Scrape, Condition, File, Merge, Output, MCP Tool
 - **Multi-provider LLM support** — Claude (Anthropic) and OpenAI models
 - **Variable system** — Pass data between nodes with `{{Node Title.output}}` syntax
 - **Real-time execution monitoring** — Per-node status updates with running/success/error states
@@ -32,6 +32,7 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 - **Cost estimation** — Token usage and estimated cost tracking per execution
 - **Undo/Redo** — Full history with Cmd+Z / Cmd+Shift+Z
 - **Keyboard shortcuts** — Cmd+S (save), Cmd+Enter (run), Cmd+D (duplicate), ? (help)
+- **MCP Server support** — Call MCP tools from workflows + expose workflows as MCP tools
 - **Dark theme** — Purpose-built dark interface optimized for focus
 
 ---
@@ -94,6 +95,7 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 | **Condition** | ⑂ | Branch based on conditions | Route based on content, length, sentiment |
 | **Merge** | ⊕ | Combine multiple inputs | Aggregate data from parallel paths |
 | **File** | 📄 | Read or write files | Document processing, data I/O |
+| **MCP Tool** | 🔌 | Call an MCP server tool | Connect to any MCP-compatible server |
 | **Output** | ↑ | Workflow result endpoint | Display or save final results |
 
 ---
@@ -108,7 +110,27 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 
 ---
 
-## Getting Started
+## Quick Start with Docker
+
+The fastest way to get FlowPilot running:
+
+```bash
+git clone https://github.com/cbrahmam/AI-Workflow-Orchestrator.git
+cd AI-Workflow-Orchestrator
+cp .env.example .env          # Add your API keys
+docker compose up --build
+```
+
+Open [http://localhost:3000](http://localhost:3000) and start building workflows.
+
+### One-Click Deploy
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/flowpilot?referralCode=flowpilot)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/cbrahmam/AI-Workflow-Orchestrator)
+
+---
+
+## Getting Started (Manual)
 
 ### Prerequisites
 
@@ -162,6 +184,39 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 
 ---
 
+## MCP Integration
+
+FlowPilot supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) in two ways:
+
+### 1. Call MCP Tools from Workflows
+
+Use the **MCP Tool** node to call any MCP server:
+- Point it at an MCP server URL (e.g., `http://localhost:3001/mcp`)
+- Select a tool name and pass arguments
+- Chain it with other nodes like any other integration
+
+### 2. Expose Workflows as MCP Tools
+
+FlowPilot acts as an MCP server itself. Any workflow you create automatically becomes an MCP tool that other apps can call.
+
+**Connect Claude Desktop** — add this to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "flowpilot": {
+      "url": "http://localhost:8000/mcp"
+    }
+  }
+}
+```
+
+**Endpoints:**
+- `POST /mcp` — MCP JSON-RPC endpoint (tools/list, tools/call)
+- `GET /mcp/info` — Human-readable list of available workflow tools
+
+---
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
@@ -178,6 +233,20 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 | POST | `/api/executions/:id/cancel` | Cancel an execution |
 | GET | `/api/templates` | List templates |
 | POST | `/api/templates/:id/use` | Create workflow from template |
+| GET | `/api/templates/community` | List community templates |
+| POST | `/mcp` | MCP JSON-RPC endpoint |
+| GET | `/mcp/info` | MCP server info & tool list |
+
+---
+
+## Contributing
+
+We welcome contributions! The easiest way to contribute is by **submitting a workflow template** — no code changes needed.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- How to submit a community template (just a JSON file + README)
+- How to add new node types
+- Code contribution guidelines
 
 ---
 

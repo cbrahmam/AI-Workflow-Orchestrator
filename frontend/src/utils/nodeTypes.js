@@ -8,6 +8,7 @@ import {
   GitBranch,
   Merge,
   FileText,
+  Plug,
 } from 'lucide-react'
 
 export const NODE_TYPES = {
@@ -135,13 +136,28 @@ export const NODE_TYPES = {
     handles: { inputs: 1, outputs: 0 },
     defaultConfig: { outputType: 'display', label: 'Result' },
   },
+  mcp_tool: {
+    type: 'mcp_tool',
+    label: 'MCP Tool',
+    category: 'Integration',
+    color: '#EC4899',
+    icon: Plug,
+    description: 'Call an MCP server tool',
+    handles: { inputs: 1, outputs: 1 },
+    defaultConfig: {
+      serverUrl: '',
+      toolName: '',
+      toolArgs: '{}',
+      authHeader: '',
+    },
+  },
 }
 
 export const CATEGORIES = [
   { name: 'Input/Output', types: ['input', 'output'] },
   { name: 'AI', types: ['llm'] },
   { name: 'Data', types: ['transform', 'merge'] },
-  { name: 'Integration', types: ['api_call', 'scrape', 'file'] },
+  { name: 'Integration', types: ['api_call', 'scrape', 'file', 'mcp_tool'] },
   { name: 'Logic', types: ['condition'] },
 ]
 

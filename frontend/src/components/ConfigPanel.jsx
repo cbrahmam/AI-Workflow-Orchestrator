@@ -11,6 +11,7 @@ import ConditionConfig from './config/ConditionConfig'
 import FileConfig from './config/FileConfig'
 import MergeConfig from './config/MergeConfig'
 import OutputConfig from './config/OutputConfig'
+import MCPConfig from './config/MCPConfig'
 
 const CONFIG_COMPONENTS = {
   input: InputConfig,
@@ -22,6 +23,7 @@ const CONFIG_COMPONENTS = {
   file: FileConfig,
   merge: MergeConfig,
   output: OutputConfig,
+  mcp_tool: MCPConfig,
 }
 
 export default function ConfigPanel() {
