@@ -77,3 +77,23 @@ export function useTemplate(id) {
 export function listCommunityTemplates() {
   return request('/templates/community')
 }
+
+export function listPlugins() {
+  return request('/plugins')
+}
+
+export function listSchedules() {
+  return request('/schedules')
+}
+
+export function createSchedule(data) {
+  return request('/schedules', { method: 'POST', body: JSON.stringify(data) })
+}
+
+export function deleteSchedule(id) {
+  return request(`/schedules/${id}`, { method: 'DELETE' })
+}
+
+export function toggleSchedule(id) {
+  return request(`/schedules/${id}/toggle`, { method: 'POST' })
+}

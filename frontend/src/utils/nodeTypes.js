@@ -9,6 +9,7 @@ import {
   Merge,
   FileText,
   Plug,
+  Workflow,
 } from 'lucide-react'
 
 export const NODE_TYPES = {
@@ -136,6 +137,19 @@ export const NODE_TYPES = {
     handles: { inputs: 1, outputs: 0 },
     defaultConfig: { outputType: 'display', label: 'Result' },
   },
+  sub_workflow: {
+    type: 'sub_workflow',
+    label: 'Sub-Workflow',
+    category: 'Logic',
+    color: '#A855F7',
+    icon: Workflow,
+    description: 'Run another workflow as a step',
+    handles: { inputs: 1, outputs: 1 },
+    defaultConfig: {
+      workflowId: '',
+      workflowName: '',
+    },
+  },
   mcp_tool: {
     type: 'mcp_tool',
     label: 'MCP Tool',
@@ -158,7 +172,7 @@ export const CATEGORIES = [
   { name: 'AI', types: ['llm'] },
   { name: 'Data', types: ['transform', 'merge'] },
   { name: 'Integration', types: ['api_call', 'scrape', 'file', 'mcp_tool'] },
-  { name: 'Logic', types: ['condition'] },
+  { name: 'Logic', types: ['condition', 'sub_workflow'] },
 ]
 
 export function getNodeColor(type) {

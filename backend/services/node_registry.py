@@ -7,6 +7,7 @@ from services.nodes.file_node import FileNode
 from services.nodes.merge_node import MergeNode
 from services.nodes.output_node import OutputNode
 from services.nodes.mcp_node import MCPNode
+from services.nodes.subworkflow_node import SubWorkflowNode
 
 NODE_REGISTRY = {
     "llm": LLMNode,
@@ -18,11 +19,14 @@ NODE_REGISTRY = {
     "merge": MergeNode,
     "output": OutputNode,
     "mcp_tool": MCPNode,
+    "sub_workflow": SubWorkflowNode,
 }
 
 
 def get_node_executor(node_type: str, config: dict):
     cls = NODE_REGISTRY.get(node_type)
-    if not cls:
-        return None
-    return cls(config)
+    if cls:
+        return cls(config)
+
+    from services.plugin_loader import get_plugin_executor
+    return get_plugin_executor(node_type, config)

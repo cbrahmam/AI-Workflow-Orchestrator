@@ -29,6 +29,10 @@ function getConfigPreview(type, config) {
       return config.inputType || 'text'
     case 'output':
       return config.outputType || 'display'
+    case 'mcp_tool':
+      return config.toolName || 'Configure tool'
+    case 'sub_workflow':
+      return config.workflowName || 'Select workflow'
     default:
       return ''
   }

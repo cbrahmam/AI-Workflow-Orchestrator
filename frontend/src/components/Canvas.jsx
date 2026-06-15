@@ -20,6 +20,7 @@ import MergeNode from './nodes/MergeNode'
 import FileNode from './nodes/FileNode'
 import OutputNode from './nodes/OutputNode'
 import MCPNode from './nodes/MCPNode'
+import SubWorkflowNode from './nodes/SubWorkflowNode'
 
 const nodeTypes = {
   input: InputNode,
@@ -32,6 +33,7 @@ const nodeTypes = {
   file: FileNode,
   output: OutputNode,
   mcp_tool: MCPNode,
+  sub_workflow: SubWorkflowNode,
 }
 
 const defaultEdgeOptions = {
@@ -128,7 +130,7 @@ export default function Canvas() {
               input: '#10B981', output: '#EF4444', llm: '#8B5CF6',
               transform: '#0EA5E9', api_call: '#F59E0B', scrape: '#14B8A6',
               condition: '#EAB308', merge: '#0EA5E9', file: '#6B7280',
-              mcp_tool: '#EC4899',
+              mcp_tool: '#EC4899', sub_workflow: '#A855F7',
             }
             return colors[type] || '#6B7280'
           }}

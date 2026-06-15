@@ -12,6 +12,7 @@ import FileConfig from './config/FileConfig'
 import MergeConfig from './config/MergeConfig'
 import OutputConfig from './config/OutputConfig'
 import MCPConfig from './config/MCPConfig'
+import SubWorkflowConfig from './config/SubWorkflowConfig'
 
 const CONFIG_COMPONENTS = {
   input: InputConfig,
@@ -24,6 +25,7 @@ const CONFIG_COMPONENTS = {
   merge: MergeConfig,
   output: OutputConfig,
   mcp_tool: MCPConfig,
+  sub_workflow: SubWorkflowConfig,
 }
 
 export default function ConfigPanel() {

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import init_db
-from routers import workflows, execute, templates, mcp
+from routers import workflows, execute, templates, mcp, triggers, ws, plugins
 
 
 @asynccontextmanager
@@ -37,6 +37,9 @@ app.include_router(workflows.router)
 app.include_router(execute.router)
 app.include_router(templates.router)
 app.include_router(mcp.router)
+app.include_router(triggers.router)
+app.include_router(ws.router)
+app.include_router(plugins.router)
 
 if __name__ == "__main__":
     uvicorn.run(

@@ -19,7 +19,7 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 ## Features
 
 - **Visual drag-and-drop workflow builder** — Intuitive canvas powered by React Flow
-- **10 node types** — Input, LLM, Transform, API Call, Web Scrape, Condition, File, Merge, Output, MCP Tool
+- **11 node types** — Input, LLM, Transform, API Call, Web Scrape, Condition, File, Merge, Output, MCP Tool, Sub-Workflow
 - **Multi-provider LLM support** — Claude (Anthropic) and OpenAI models
 - **Variable system** — Pass data between nodes with `{{Node Title.output}}` syntax
 - **Real-time execution monitoring** — Per-node status updates with running/success/error states
@@ -33,6 +33,12 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 - **Undo/Redo** — Full history with Cmd+Z / Cmd+Shift+Z
 - **Keyboard shortcuts** — Cmd+S (save), Cmd+Enter (run), Cmd+D (duplicate), ? (help)
 - **MCP Server support** — Call MCP tools from workflows + expose workflows as MCP tools
+- **Sub-workflows** — Embed workflows inside other workflows for composable pipelines
+- **Webhook triggers** — Trigger any workflow via HTTP POST
+- **Cron scheduling** — Run workflows on a recurring schedule
+- **WebSocket streaming** — Real-time execution progress via WebSocket
+- **Plugin SDK** — Drop-in custom nodes via community-nodes/ directory
+- **CLI runner** — Execute workflows from the command line for CI/CD
 - **Dark theme** — Purpose-built dark interface optimized for focus
 
 ---
@@ -95,6 +101,7 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 | **Condition** | ⑂ | Branch based on conditions | Route based on content, length, sentiment |
 | **Merge** | ⊕ | Combine multiple inputs | Aggregate data from parallel paths |
 | **File** | 📄 | Read or write files | Document processing, data I/O |
+| **Sub-Workflow** | 🔄 | Run another workflow as a step | Composable, nested pipelines |
 | **MCP Tool** | 🔌 | Call an MCP server tool | Connect to any MCP-compatible server |
 | **Output** | ↑ | Workflow result endpoint | Display or save final results |
 
@@ -217,6 +224,74 @@ FlowPilot acts as an MCP server itself. Any workflow you create automatically be
 
 ---
 
+## Webhook Triggers
+
+Any workflow can be triggered via HTTP POST — no UI needed:
+
+```bash
+curl -X POST http://localhost:8000/api/webhooks/<workflow_id> \
+  -H "Content-Type: application/json" \
+  -d '{"input": "your data here"}'
+```
+
+Returns the execution result synchronously. Great for integrating FlowPilot into other systems, Zapier, or CI/CD pipelines.
+
+---
+
+## Cron Scheduling
+
+Schedule workflows to run on a recurring interval:
+
+```bash
+# Run every 30 minutes
+curl -X POST http://localhost:8000/api/schedules \
+  -H "Content-Type: application/json" \
+  -d '{"workflow_id": "<id>", "cron_expression": "30m"}'
+```
+
+Supported formats: `5m`, `1h`, `30s`, or standard cron `*/5 * * * *`.
+
+---
+
+## Plugin SDK
+
+Create custom nodes by dropping a folder into `community-nodes/`:
+
+```
+community-nodes/
+  my-plugin/
+    node.json       # Node definition (type, label, color, config)
+    executor.py     # Python: async execute(input_data, config) -> result
+    README.md       # Optional documentation
+```
+
+Plugins are auto-discovered on backend startup. See `community-nodes/example-sentiment/` for a working example.
+
+---
+
+## CLI
+
+Run workflows from the command line:
+
+```bash
+# List all workflows
+python cli/flowpilot.py list
+
+# Execute a workflow
+python cli/flowpilot.py run <workflow_id> --input "Hello world"
+
+# Execute from a JSON file
+python cli/flowpilot.py run-file workflow.json --input "data"
+
+# Trigger via webhook
+python cli/flowpilot.py webhook <workflow_id> --input "data"
+
+# Write output to file
+python cli/flowpilot.py run <workflow_id> -o result.txt
+```
+
+---
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
@@ -236,6 +311,13 @@ FlowPilot acts as an MCP server itself. Any workflow you create automatically be
 | GET | `/api/templates/community` | List community templates |
 | POST | `/mcp` | MCP JSON-RPC endpoint |
 | GET | `/mcp/info` | MCP server info & tool list |
+| POST | `/api/webhooks/:id` | Trigger workflow via webhook |
+| POST | `/api/schedules` | Create a cron schedule |
+| GET | `/api/schedules` | List all schedules |
+| DELETE | `/api/schedules/:id` | Delete a schedule |
+| POST | `/api/schedules/:id/toggle` | Enable/disable a schedule |
+| GET | `/api/plugins` | List installed plugins |
+| WS | `/ws/execute/:id` | Stream workflow execution |
 
 ---
 
