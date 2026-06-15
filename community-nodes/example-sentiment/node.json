@@ -1,0 +1,29 @@
+{
+  "type": "sentiment",
+  "label": "Sentiment Analyzer",
+  "category": "AI",
+  "color": "#F472B6",
+  "icon": "Heart",
+  "description": "Analyze text sentiment using keyword matching (example plugin)",
+  "author": "flowpilot",
+  "handles": {
+    "inputs": 1,
+    "outputs": 1
+  },
+  "configFields": [
+    {
+      "key": "threshold",
+      "label": "Confidence Threshold",
+      "type": "number",
+      "default": 0.5,
+      "description": "Minimum confidence score (0-1)"
+    },
+    {
+      "key": "detailed",
+      "label": "Detailed Output",
+      "type": "boolean",
+      "default": false,
+      "description": "Include word-level breakdown"
+    }
+  ]
+}
