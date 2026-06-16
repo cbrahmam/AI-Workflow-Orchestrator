@@ -13,6 +13,10 @@ import MergeConfig from './config/MergeConfig'
 import OutputConfig from './config/OutputConfig'
 import MCPConfig from './config/MCPConfig'
 import SubWorkflowConfig from './config/SubWorkflowConfig'
+import ABCompareConfig from './config/ABCompareConfig'
+import NotifySlackConfig from './config/NotifySlackConfig'
+import NotifyEmailConfig from './config/NotifyEmailConfig'
+import NotifyDiscordConfig from './config/NotifyDiscordConfig'
 
 const CONFIG_COMPONENTS = {
   input: InputConfig,
@@ -26,6 +30,10 @@ const CONFIG_COMPONENTS = {
   output: OutputConfig,
   mcp_tool: MCPConfig,
   sub_workflow: SubWorkflowConfig,
+  ab_compare: ABCompareConfig,
+  notify_slack: NotifySlackConfig,
+  notify_email: NotifyEmailConfig,
+  notify_discord: NotifyDiscordConfig,
 }
 
 export default function ConfigPanel() {

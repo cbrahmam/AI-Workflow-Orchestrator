@@ -19,7 +19,7 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 ## Features
 
 - **Visual drag-and-drop workflow builder** — Intuitive canvas powered by React Flow
-- **11 node types** — Input, LLM, Transform, API Call, Web Scrape, Condition, File, Merge, Output, MCP Tool, Sub-Workflow
+- **15 node types** — Input, LLM, A/B Compare, Transform, API Call, Web Scrape, Condition, File, Merge, Output, MCP Tool, Sub-Workflow, Slack, Email, Discord
 - **Multi-provider LLM support** — Claude (Anthropic) and OpenAI models
 - **Variable system** — Pass data between nodes with `{{Node Title.output}}` syntax
 - **Real-time execution monitoring** — Per-node status updates with running/success/error states
@@ -39,6 +39,10 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 - **WebSocket streaming** — Real-time execution progress via WebSocket
 - **Plugin SDK** — Drop-in custom nodes via community-nodes/ directory
 - **CLI runner** — Execute workflows from the command line for CI/CD
+- **AI Workflow Generator** — Describe what you want in natural language, get a full workflow
+- **Multi-Model A/B Compare** — Compare outputs from multiple LLMs side-by-side
+- **Notification nodes** — Send results to Slack, Email, or Discord
+- **Analytics dashboard** — Execution history, success rates, token spend, cost tracking
 - **Dark theme** — Purpose-built dark interface optimized for focus
 
 ---
@@ -101,6 +105,10 @@ FlowPilot provides a visual canvas where you drag and drop nodes, connect them, 
 | **Condition** | ⑂ | Branch based on conditions | Route based on content, length, sentiment |
 | **Merge** | ⊕ | Combine multiple inputs | Aggregate data from parallel paths |
 | **File** | 📄 | Read or write files | Document processing, data I/O |
+| **A/B Compare** | 🧪 | Compare multiple LLM outputs | Model evaluation, quality testing |
+| **Slack** | 🔔 | Send a Slack message | Team notifications, alerts |
+| **Email** | 📧 | Send an email via SMTP | Reports, notifications |
+| **Discord** | 💬 | Send a Discord message | Community notifications |
 | **Sub-Workflow** | 🔄 | Run another workflow as a step | Composable, nested pipelines |
 | **MCP Tool** | 🔌 | Call an MCP server tool | Connect to any MCP-compatible server |
 | **Output** | ↑ | Workflow result endpoint | Display or save final results |
@@ -224,6 +232,23 @@ FlowPilot acts as an MCP server itself. Any workflow you create automatically be
 
 ---
 
+## AI Workflow Generator
+
+Don't want to build from scratch? Describe what you want in plain English:
+
+> "Scrape Hacker News, summarize the top 5 posts, and send a digest to Slack"
+
+Click **AI Generate** in the sidebar and FlowPilot builds the entire workflow — nodes, connections, and configuration — in seconds.
+
+```bash
+# Also available via API
+curl -X POST http://localhost:8000/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Read a CSV file and summarize it with AI"}'
+```
+
+---
+
 ## Webhook Triggers
 
 Any workflow can be triggered via HTTP POST — no UI needed:
@@ -318,6 +343,8 @@ python cli/flowpilot.py run <workflow_id> -o result.txt
 | POST | `/api/schedules/:id/toggle` | Enable/disable a schedule |
 | GET | `/api/plugins` | List installed plugins |
 | WS | `/ws/execute/:id` | Stream workflow execution |
+| POST | `/api/generate` | AI workflow generator |
+| GET | `/api/analytics` | Execution analytics & stats |
 
 ---
 

@@ -21,6 +21,10 @@ import FileNode from './nodes/FileNode'
 import OutputNode from './nodes/OutputNode'
 import MCPNode from './nodes/MCPNode'
 import SubWorkflowNode from './nodes/SubWorkflowNode'
+import ABCompareNode from './nodes/ABCompareNode'
+import NotifySlackNode from './nodes/NotifySlackNode'
+import NotifyEmailNode from './nodes/NotifyEmailNode'
+import NotifyDiscordNode from './nodes/NotifyDiscordNode'
 
 const nodeTypes = {
   input: InputNode,
@@ -34,6 +38,10 @@ const nodeTypes = {
   output: OutputNode,
   mcp_tool: MCPNode,
   sub_workflow: SubWorkflowNode,
+  ab_compare: ABCompareNode,
+  notify_slack: NotifySlackNode,
+  notify_email: NotifyEmailNode,
+  notify_discord: NotifyDiscordNode,
 }
 
 const defaultEdgeOptions = {
@@ -131,6 +139,8 @@ export default function Canvas() {
               transform: '#0EA5E9', api_call: '#F59E0B', scrape: '#14B8A6',
               condition: '#EAB308', merge: '#0EA5E9', file: '#6B7280',
               mcp_tool: '#EC4899', sub_workflow: '#A855F7',
+              ab_compare: '#F472B6', notify_slack: '#E01E5A',
+              notify_email: '#3B82F6', notify_discord: '#5865F2',
             }
             return colors[type] || '#6B7280'
           }}

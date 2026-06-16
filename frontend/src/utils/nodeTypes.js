@@ -10,6 +10,10 @@ import {
   FileText,
   Plug,
   Workflow,
+  FlaskConical,
+  Bell,
+  Mail,
+  MessageSquare,
 } from 'lucide-react'
 
 export const NODE_TYPES = {
@@ -137,6 +141,72 @@ export const NODE_TYPES = {
     handles: { inputs: 1, outputs: 0 },
     defaultConfig: { outputType: 'display', label: 'Result' },
   },
+  ab_compare: {
+    type: 'ab_compare',
+    label: 'A/B Compare',
+    category: 'AI',
+    color: '#F472B6',
+    icon: FlaskConical,
+    description: 'Compare outputs from multiple LLMs',
+    handles: { inputs: 1, outputs: 1 },
+    defaultConfig: {
+      prompt: '',
+      systemPrompt: '',
+      temperature: 0.7,
+      maxTokens: 1024,
+      models: [
+        { provider: 'claude', model: 'claude-sonnet-4-20250514' },
+        { provider: 'openai', model: 'gpt-4o' },
+      ],
+    },
+  },
+  notify_slack: {
+    type: 'notify_slack',
+    label: 'Slack',
+    category: 'Notifications',
+    color: '#E01E5A',
+    icon: Bell,
+    description: 'Send a message to Slack',
+    handles: { inputs: 1, outputs: 1 },
+    defaultConfig: {
+      webhookUrl: '',
+      channel: '',
+      username: 'FlowPilot',
+      messageTemplate: '{{Input.output}}',
+    },
+  },
+  notify_email: {
+    type: 'notify_email',
+    label: 'Email',
+    category: 'Notifications',
+    color: '#3B82F6',
+    icon: Mail,
+    description: 'Send an email via SMTP',
+    handles: { inputs: 1, outputs: 1 },
+    defaultConfig: {
+      to: '',
+      subject: 'FlowPilot Notification',
+      smtpHost: '',
+      smtpPort: 587,
+      smtpUser: '',
+      smtpPass: '',
+      bodyTemplate: '{{Input.output}}',
+    },
+  },
+  notify_discord: {
+    type: 'notify_discord',
+    label: 'Discord',
+    category: 'Notifications',
+    color: '#5865F2',
+    icon: MessageSquare,
+    description: 'Send a message to Discord',
+    handles: { inputs: 1, outputs: 1 },
+    defaultConfig: {
+      webhookUrl: '',
+      username: 'FlowPilot',
+      messageTemplate: '{{Input.output}}',
+    },
+  },
   sub_workflow: {
     type: 'sub_workflow',
     label: 'Sub-Workflow',
@@ -169,9 +239,10 @@ export const NODE_TYPES = {
 
 export const CATEGORIES = [
   { name: 'Input/Output', types: ['input', 'output'] },
-  { name: 'AI', types: ['llm'] },
+  { name: 'AI', types: ['llm', 'ab_compare'] },
   { name: 'Data', types: ['transform', 'merge'] },
   { name: 'Integration', types: ['api_call', 'scrape', 'file', 'mcp_tool'] },
+  { name: 'Notifications', types: ['notify_slack', 'notify_email', 'notify_discord'] },
   { name: 'Logic', types: ['condition', 'sub_workflow'] },
 ]
 

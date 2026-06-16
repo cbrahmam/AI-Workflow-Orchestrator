@@ -8,6 +8,8 @@ from services.nodes.merge_node import MergeNode
 from services.nodes.output_node import OutputNode
 from services.nodes.mcp_node import MCPNode
 from services.nodes.subworkflow_node import SubWorkflowNode
+from services.nodes.ab_compare_node import ABCompareNode
+from services.nodes.notify_node import NotifySlackNode, NotifyEmailNode, NotifyDiscordNode
 
 NODE_REGISTRY = {
     "llm": LLMNode,
@@ -20,6 +22,10 @@ NODE_REGISTRY = {
     "output": OutputNode,
     "mcp_tool": MCPNode,
     "sub_workflow": SubWorkflowNode,
+    "ab_compare": ABCompareNode,
+    "notify_slack": NotifySlackNode,
+    "notify_email": NotifyEmailNode,
+    "notify_discord": NotifyDiscordNode,
 }
 
 

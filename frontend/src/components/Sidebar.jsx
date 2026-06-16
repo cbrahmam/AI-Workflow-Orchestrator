@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Workflow, LayoutGrid, Sparkles } from 'lucide-react'
+import { Workflow, LayoutGrid, Sparkles, Wand2, BarChart3 } from 'lucide-react'
 import NodePalette from './NodePalette'
+import GenerateModal from './GenerateModal'
 
 export default function Sidebar() {
   const navigate = useNavigate()
+  const [showGenerate, setShowGenerate] = useState(false)
 
   return (
     <div
@@ -40,6 +43,25 @@ export default function Sidebar() {
           <Sparkles size={13} />
           Templates
         </button>
+        <button
+          onClick={() => navigate('/analytics')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
+        >
+          <BarChart3 size={13} />
+          Analytics
+        </button>
+      </div>
+
+      {/* AI Generate Button */}
+      <div className="px-3 pt-2 pb-1">
+        <button
+          onClick={() => setShowGenerate(true)}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-medium text-white transition-all hover:brightness-110"
+          style={{ background: 'linear-gradient(135deg, #8B5CF6, #EC4899)' }}
+        >
+          <Wand2 size={14} />
+          AI Generate
+        </button>
       </div>
 
       {/* Node Palette */}
@@ -51,6 +73,8 @@ export default function Sidebar() {
         </div>
         <NodePalette />
       </div>
+
+      {showGenerate && <GenerateModal onClose={() => setShowGenerate(false)} />}
     </div>
   )
 }

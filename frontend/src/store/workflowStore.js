@@ -33,6 +33,14 @@ function getConfigPreview(type, config) {
       return config.toolName || 'Configure tool'
     case 'sub_workflow':
       return config.workflowName || 'Select workflow'
+    case 'ab_compare':
+      return config.models?.length ? `${config.models.length} models` : 'Configure models'
+    case 'notify_slack':
+      return config.channel || 'Configure webhook'
+    case 'notify_email':
+      return config.to || 'Configure email'
+    case 'notify_discord':
+      return 'Discord webhook'
     default:
       return ''
   }
